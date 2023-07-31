@@ -1,0 +1,52 @@
+apiVersion: rbac.authorization.k8s.io/v1
+kind: ClusterRole
+metadata:
+  name: rbac-secret-list
+rules:
+  - apiGroups: 
+    - ""
+    resources: 
+    - "secrets"
+    verbs: 
+    - "list"
+    - "watch"
+---
+apiVersion: rbac.authorization.k8s.io/v1
+kind: ClusterRole
+metadata:
+  name: rbac-secret-get
+rules:
+  - apiGroups: 
+    - ""
+    resources: 
+    - "secrets"
+    verbs: 
+    - "get"
+    resourceNames:
+    - app-secret
+---
+apiVersion: rbac.authorization.k8s.io/v1
+kind: ClusterRoleBinding
+metadata:
+  name: rbac-secret-list
+roleRef:
+  apiGroup: rbac.authorization.k8s.io
+  kind: ClusterRole
+  name: rbac-secret-list
+subjects:
+- namespace: rbac-secrets
+  kind: ServiceAccount
+  name: app-service-account
+---
+apiVersion: rbac.authorization.k8s.io/v1
+kind: ClusterRoleBinding
+metadata:
+  name: rbac-secret-get
+roleRef:
+  apiGroup: rbac.authorization.k8s.io
+  kind: ClusterRole
+  name: rbac-secret-get
+subjects:
+- namespace: rbac-secrets
+  kind: ServiceAccount
+  name: app-service-account
